@@ -60,7 +60,12 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    //this is a delete mapping
+    /**
+     * Deletes the cart associated with the given identifier.
+     *
+     * @param cartId the identifier of the cart to delete
+     * @return a {@link ResponseEntity} with HTTP 204 (No Content) after processing the delete request
+     */
     @DeleteMapping("/{cartId}")
     public ResponseEntity<Void> deleteCart(@PathVariable String cartId) {
         cartService.deleteCart(cartId);
