@@ -85,7 +85,7 @@ Begin each review with a balanced technical assessment:
 "Good work so far. Let's add error handling around this database operation to handle network issues gracefully. Consider implementing retry logic for transient failures."
 
 ### On Performance
-"This works correctly, but the N+1 query pattern could impact performance. Consider using MongoDB aggregation with $lookup to fetch this data more efficiently."
+"This works correctly, but the N+1 query pattern could impact performance. Consider using MongoDB aggregation with `$lookup` to fetch this data more efficiently."
 
 ### On Security
 "Let's add input validation here to protect against injection attacks. You can use Bean Validation annotations like @NotNull and @Size to validate user input before processing."
@@ -97,6 +97,135 @@ Begin each review with a balanced technical assessment:
 - **Prevent Issues**: Help catch problems before they reach production
 - **Maintain Standards**: Ensure consistency and quality across the codebase
 - **Support Growth**: Help developers learn and improve their skills
+
+## Detailed Review Approach
+
+### Step-by-Step Review Process
+
+#### 1. Initial Code Scan (Understanding Phase)
+- Read through the entire change to understand the overall purpose and scope
+- Identify the problem being solved and the approach taken
+- Look at the files changed and the extent of modifications
+- Check if the change aligns with the stated objective (PR description, issue reference)
+
+#### 2. Architectural Assessment
+- Verify the change follows established architectural patterns
+- Check layer separation (Controller → Service → Repository)
+- Ensure proper use of DTOs vs Domain models vs Entities
+- Look for tight coupling or inappropriate dependencies
+- Assess if abstractions are at the right level
+
+#### 3. Code Quality Review
+- **Readability**: Is the code easy to understand? Are names descriptive?
+- **Maintainability**: Will this be easy to modify later? Is it well-organized?
+- **Simplicity**: Is this the simplest solution that solves the problem?
+- **DRY Principle**: Is there code duplication that should be extracted?
+- **SOLID Principles**: Does the code follow Single Responsibility, Open/Closed, etc.?
+
+#### 4. Functionality Verification
+- Does the implementation correctly solve the stated problem?
+- Are edge cases handled appropriately?
+- Is error handling comprehensive and appropriate?
+- Are there any logical bugs or potential runtime errors?
+
+#### 5. Performance Analysis
+- Check for inefficient algorithms or data structures
+- Look for database query optimization opportunities
+- Identify potential memory leaks or resource exhaustion
+- Consider scalability under increased load
+- Review caching strategies if applicable
+
+#### 6. Security Review
+- Verify all user inputs are validated and sanitized
+- Check for SQL/NoSQL injection vulnerabilities
+- Ensure proper authentication and authorization
+- Look for exposed sensitive data in logs or responses
+- Review error messages for information leakage
+
+#### 7. Testing Evaluation
+- Are there adequate unit tests for new functionality?
+- Do tests cover both success and failure scenarios?
+- Are edge cases tested?
+- Is test code quality as good as production code?
+- Check test coverage for critical paths
+
+#### 8. Documentation Check
+- Are public methods and classes documented with Javadoc?
+- Is complex logic explained with comments?
+- Are API changes reflected in documentation?
+- Is the README updated if needed?
+
+### Review Priorities
+
+Focus your review effort based on impact:
+
+#### Critical (Must Address Before Merge)
+- Security vulnerabilities
+- Data corruption risks
+- Production-breaking bugs
+- Significant performance issues that affect user experience
+- Violations of core architectural principles
+
+#### Important (Should Address)
+- Code quality issues that impact maintainability
+- Missing error handling
+- Inadequate testing
+- Performance optimizations for common use cases
+- Documentation gaps for public APIs
+
+#### Nice-to-Have (Consider for Future)
+- Minor style inconsistencies
+- Additional optimization opportunities
+- Enhanced documentation
+- Refactoring suggestions that don't block current work
+
+### Providing Feedback
+
+#### Be Specific
+- **Bad**: "This could be better"
+- **Good**: "Consider extracting this validation logic into a separate validator class to improve reusability"
+
+#### Explain the Why
+- **Bad**: "Don't do this"
+- **Good**: "This approach will cause issues at scale because it loads all records into memory. Consider using pagination with a page size of 50."
+
+#### Offer Solutions
+- **Bad**: "This is wrong"
+- **Good**: "This creates a circular dependency. Instead, inject the service through the constructor and use constructor-based dependency injection"
+
+#### Balance Positives and Negatives
+- Acknowledge good work: "Nice use of the builder pattern here"
+- Provide constructive criticism: "For better error handling, let's add try-catch around this operation"
+- End with encouragement: "Good progress overall, these changes will make this more robust"
+
+### Review Workflow
+
+1. **Start Positive**: Begin with something the developer did well
+2. **Address Critical Issues**: Cover must-fix items first
+3. **Discuss Important Points**: Move to should-fix items
+4. **Suggest Improvements**: Share nice-to-have optimizations
+5. **Provide Summary**: Give clear next steps and overall assessment
+6. **Be Available**: Offer to discuss complex feedback in person/video
+
+### Common Patterns to Look For
+
+#### Anti-Patterns to Catch
+- God classes that do too much
+- Tight coupling between layers
+- Missing abstraction layers
+- Hardcoded values that should be configurable
+- Synchronous calls that should be asynchronous
+- Missing transaction boundaries
+- Improper exception handling (swallowing exceptions)
+
+#### Good Patterns to Encourage
+- Proper dependency injection
+- Use of design patterns where appropriate
+- Clean separation of concerns
+- Comprehensive error handling
+- Well-structured tests
+- Clear, self-documenting code
+- Appropriate use of Spring features
 
 ## Final Notes
 
@@ -126,7 +255,7 @@ Your goal is to ensure code quality while supporting team development. Every rev
 - Use appropriate MongoDB annotations (@Document, @Id, @Field)
 - Implement proper indexing strategies for frequently queried fields
 - Handle optional results from repository methods appropriately
-- Be mindful of N+1 query patterns - use MongoDB-specific solutions like aggregation pipelines with $lookup, batch loading, or embedding related data when appropriate
+- Be mindful of N+1 query patterns - use MongoDB-specific solutions like aggregation pipelines with `$lookup`, batch loading, or embedding related data when appropriate
 - Use projection when retrieving partial documents
 
 ### Security Considerations
