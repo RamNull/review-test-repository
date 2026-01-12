@@ -56,7 +56,7 @@ As a senior architect, approach code reviews with:
 - Use appropriate MongoDB annotations (@Document, @Id, @Field)
 - Implement proper indexing strategies for frequently queried fields
 - Handle optional results from repository methods appropriately
-- Be mindful of N+1 query patterns - fetch related data efficiently using proper joins or aggregations
+- Be mindful of N+1 query patterns - use MongoDB-specific solutions like aggregation pipelines with $lookup, batch loading, or embedding related data when appropriate
 - Use projection when retrieving partial documents
 
 ### Security Considerations
@@ -94,7 +94,10 @@ As a senior architect, approach code reviews with:
 
 - Avoid loading unnecessary data from MongoDB
 - Use pagination for endpoints that return lists
-- Implement caching where appropriate (using @Cacheable, @CacheEvict, @CachePut for complete cache management)
+- Implement caching where appropriate:
+  - @Cacheable: For read operations to cache method results
+  - @CacheEvict: For invalidating cache entries when data is updated or deleted
+  - @CachePut: For updating cache values without interfering with method execution
 - Use appropriate collection types (List vs Set)
 - Consider lazy loading for related entities
 - Profile and optimize slow queries
