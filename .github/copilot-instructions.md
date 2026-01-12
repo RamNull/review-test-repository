@@ -27,7 +27,7 @@ This is a Spring Boot 3.1.5 REST API service for managing shopping carts with Mo
 - Use appropriate MongoDB annotations (@Document, @Id, @Field)
 - Implement proper indexing strategies for frequently queried fields
 - Handle optional results from repository methods appropriately
-- Be mindful of N+1 query problems
+- Be mindful of N+1 query patterns - fetch related data efficiently using proper joins or aggregations
 - Use projection when retrieving partial documents
 
 ### Security Considerations
@@ -65,8 +65,7 @@ This is a Spring Boot 3.1.5 REST API service for managing shopping carts with Mo
 
 - Avoid loading unnecessary data from MongoDB
 - Use pagination for endpoints that return lists
-- Implement caching where appropriate (using @Cacheable)
-- Be mindful of N+1 query patterns
+- Implement caching where appropriate (using @Cacheable, @CacheEvict, @CachePut for complete cache management)
 - Use appropriate collection types (List vs Set)
 - Consider lazy loading for related entities
 - Profile and optimize slow queries
