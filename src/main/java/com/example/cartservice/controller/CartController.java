@@ -3,6 +3,7 @@ package com.example.cartservice.controller;
 import com.example.cartservice.model.Cart;
 import com.example.cartservice.model.Item;
 import com.example.cartservice.service.CartService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,7 @@ public class CartController {
     }
 
     @PostMapping("/{cartId}/items")
-    public ResponseEntity<Cart> addItem(@PathVariable String cartId, @RequestBody Item item) {
+    public ResponseEntity<Cart> addItem(@PathVariable String cartId, @Valid @RequestBody Item item) {
         Cart cart = cartService.addItemToCart(cartId, item);
         if (cart != null) {
             return new ResponseEntity<>(cart, HttpStatus.OK);
@@ -48,6 +49,10 @@ public class CartController {
 
     @PutMapping("/{cartId}/status")
     public ResponseEntity<Cart> updateStatus(@PathVariable String cartId, @RequestParam String status) {
+        // Validate status values
+        if (!status.equals("ACTIVE") && !status.equals("COMPLETED") && !status.equals("CANCELLED")) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         Cart cart = cartService.updateCartStatus(cartId, status);
         if (cart != null) {
             return new ResponseEntity<>(cart, HttpStatus.OK);
