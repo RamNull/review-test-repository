@@ -60,6 +60,7 @@ public class CartController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
+    //this is a delete mapping
     @DeleteMapping("/{cartId}")
     public ResponseEntity<Void> deleteCart(@PathVariable String cartId) {
         cartService.deleteCart(cartId);
